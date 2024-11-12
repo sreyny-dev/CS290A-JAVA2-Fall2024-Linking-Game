@@ -97,7 +97,6 @@ public class Application extends javafx.application.Application {
 
                     if ("MATCH_FOUND".equals(response)) {
                         matchFound = true;
-                        System.out.println("Match found, waiting for board data...");
                     } else if (matchFound && response.startsWith("BOARD:")) {
                         // Now we expect the board data after MATCH_FOUND
                         String boardContent = response; // e.g., "BOARD:3,1,0,3,;3,8,6,8,;3,1,8,1,;5,4,2,6,;"

@@ -89,7 +89,7 @@ public class GameServer {
 
         public void setTurn(boolean turn){
             this.isTurn = turn;
-            out.println(turn? "YOUR_TURN" : "WAIT");// Notify player of their turn status
+            out.println(turn? "YOUR_TURN" : "NOT_YOUR_TURN");// Notify player of their turn status
         }
 
         public void setGame(int[][] board, ClientHandler opponent) {
