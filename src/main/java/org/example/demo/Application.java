@@ -129,6 +129,8 @@ public class Application extends javafx.application.Application {
 
             Scene scene = new Scene(root, 400, 400);
 
+
+            // Center the stage on the screen (optional)
             primaryStage.setScene(scene);
             primaryStage.setTitle("LianlianKan Game");
             primaryStage.show();

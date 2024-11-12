@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="20" style="-fx-background-color: #f0f0f0;">
-    <Label text="Waiting for an opponent to join..." style="-fx-font-size: 24; -fx-text-fill: #333;" />
-    <Label text="Please wait..." style="-fx-font-size: 16; -fx-text-fill: #666;" />
+    <Label text="Please wait while the game is loading..." style="-fx-font-size: 16px;"/>
+<!--    <Button text="Cancel" onAction="#handleCancel" />-->
 </VBox>
