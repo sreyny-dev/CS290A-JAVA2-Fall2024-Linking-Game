@@ -60,6 +60,14 @@ public class GameServer {
         System.out.println("Sent MATCH_FOUND and board to both players.");
     }
 
+
+    private static synchronized void passTurnToOpponent(ClientHandler currentPlayer) {
+        currentPlayer.setTurn(false);
+        currentPlayer.opponent.setTurn(true);
+        currentPlayer.out.println("NOT_YOUR_TURN");
+        currentPlayer.opponent.out.println("YOUR_TURN");
+    }
+
     private static int[][] generateBoard(int rows, int cols) {
         int[][] board = new int[rows][cols];
         Random random = new Random();

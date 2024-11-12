@@ -44,6 +44,21 @@ public class PlayerHandler implements Runnable {
                 messageQueue.offer(message);
                 System.out.println("Received from server: " + message);
 
+
+//                if (message.startsWith("YOUR_TURN")) {
+//                    // Handle the player's turn
+//                    if (controller != null) {
+//                        // Allow player to make a move on the UI
+//                        Platform.runLater(() -> controller.enableMoves());
+//                    }
+//                } else if (message.startsWith("NOT_YOUR_TURN")) {
+//                    // Notify player that it's not their turn
+//                    if (controller != null) {
+//                        Platform.runLater(() -> controller.disableMoves());
+//                    }
+//                }
+
+
                 if (message.startsWith("UPDATED_BOARD:")) {
                     String[] toRemove = message.split(":")[1].split(",");
                     int row1 = Integer.parseInt(toRemove[0]);

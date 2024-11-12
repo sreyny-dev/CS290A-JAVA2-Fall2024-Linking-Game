@@ -24,7 +24,7 @@ public class Controller {
     @FXML
     public void initialize() {
         score = 0;
-        scoreLabel.setText("0");
+//        scoreLabel.setText("0");
     }
 
     @FXML
@@ -67,6 +67,7 @@ public class Controller {
     }
 
     public void createGameBoard() {
+
         gameBoard.getChildren().clear();
         buttons = new Button[game.row][game.col]; // Initialize the button array
 
@@ -159,8 +160,6 @@ public class Controller {
 //            System.out.println("scoreLabel is null");
 //        }
     }
-
-
     public static Image imageReplacement = new Image(Objects.requireNonNull(Game.class.getResource("/org/example/demo/carambola.png")).toExternalForm());
 
     private void onGameOver() {
@@ -223,8 +222,6 @@ public class Controller {
             e.printStackTrace();
         }
     }
-
-
     public ImageView addContent(int content){
         return switch (content) {
             case 0 -> new ImageView(imageCarambola);
