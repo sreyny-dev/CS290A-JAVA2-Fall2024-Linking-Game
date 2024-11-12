@@ -1,0 +1,11 @@
+/* styles.css */
+.vbox {
+    -fx-background-image: url("D:/SUSTech/Year4-Sem1/cs209a-java2/Assignment/2024FallCS209A-A2Demo-main/src/main/resources/org/example/demo/bg.png");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+}
+
+.root {
+    -fx-background-color: lightblue;
+}

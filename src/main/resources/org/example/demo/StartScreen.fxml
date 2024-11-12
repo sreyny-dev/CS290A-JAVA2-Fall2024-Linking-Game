@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.demo.StartScreenController"
+      spacing="10" alignment="CENTER" prefWidth="400" prefHeight="400">
+
+    <!-- Replace Button with ImageView -->
+    <ImageView fx:id="image4x4" fitWidth="120" fitHeight="70" onMouseClicked="#handleBoard4x4" />
+    <ImageView fx:id="image6x8" fitWidth="120" fitHeight="70" onMouseClicked="#handleBoard6x8" />
+    <ImageView fx:id="image8x8" fitWidth="120" fitHeight="70" onMouseClicked="#handleBoard8x8" />
+</VBox>
