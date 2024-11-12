@@ -1,5 +1,7 @@
 package org.example.demo;
 
+import javafx.application.Platform;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,6 +29,10 @@ public class PlayerHandler implements Runnable {
         }
     }
 
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
     private BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
 
 
@@ -44,12 +50,10 @@ public class PlayerHandler implements Runnable {
                     int col1 = Integer.parseInt(toRemove[1]);
                     int row2 = Integer.parseInt(toRemove[2]);
                     int col2 = Integer.parseInt(toRemove[3]);
-                    System.out.println(row1 + " " + col1 + " " + row2 + " " + col2);
 
                     // Check if controller is set before calling updateBoard
                     if (controller != null) {
-                        controller.updateBoard(row1, col1, row2, col2);
-                    } else {
+                        Platform.runLater(() -> controller.updateBoard(row1, col1, row2, col2));                    } else {
                         System.err.println("Controller is not set!");
                     }
                 }

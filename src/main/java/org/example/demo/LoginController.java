@@ -53,6 +53,9 @@ public class LoginController {
         try {
             Socket socket = new Socket("localhost", 4444); // Ensure the server is running
             PlayerHandler playerHandler = new PlayerHandler(socket);
+            Controller controller = new Controller();
+            playerHandler.setController(controller);
+            controller.setPlayerHandler(playerHandler);
             new Thread(playerHandler).start(); // Start the thread to listen for messages
 
             // Send the username to the server

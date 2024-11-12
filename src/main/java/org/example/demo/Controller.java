@@ -21,7 +21,11 @@ import javafx.scene.layout.VBox;
 
 public class Controller {
     private static PlayerHandler playerHandler;
-
+    @FXML
+    public void initialize() {
+        score = 0;
+        scoreLabel.setText("0");
+    }
 
     @FXML
     private Label gameOverMessage;
@@ -96,8 +100,8 @@ public class Controller {
             return;
         }
         // Send the button press information to the server
-//        String message = "PRESS:" + row + "," + col;
-//        playerHandler.sendMessage(message);
+        String message = "PRESS:" + row + "," + col;
+        playerHandler.sendMessage(message);
         System.out.println("Button pressed at: " + row + ", " + col);
         if (position[0] == 0) {
             position[1] = row;
@@ -116,10 +120,10 @@ public class Controller {
 
             if (change) {
 
-//                message = "REMOVE:" + row + "," + col + ","+ position[1]+ "," + position[2];
-//                playerHandler.sendMessage(message);
+                message = "REMOVE:" + row + "," + col + ","+ position[1]+ "," + position[2];
+                playerHandler.sendMessage(message);
 
-                updateBoard(position[1], position[2], row, col);
+//                updateBoard(position[1], position[2], row, col);
 
             }
 
@@ -129,7 +133,6 @@ public class Controller {
     //METHOD TO UPDATE THE BOARD
 // Update the board if a valid move is made and items are eaten
     public void updateBoard(int row1, int col1, int row2, int col2) {
-        // Update the game board and score label as before
         game.board[row1][col1] = 0;
         game.board[row2][col2] = 0;
 
@@ -146,25 +149,18 @@ public class Controller {
         buttons[row1][col1].setGraphic(firstReplacementImageView);
         buttons[row2][col2].setGraphic(secondReplacementImageView);
 
-        // Update score and display it
         score += 10;
-        scoreLabel.setText(String.valueOf(score));
-
-
+//
+//        // Check if scoreLabel is initialized
+//        if (scoreLabel != null) {
+//            scoreLabel.setText(String.valueOf(score));
+//        } else {
+//            System.out.println("scoreLabel is null");
+//        }
     }
+
 
     public static Image imageReplacement = new Image(Objects.requireNonNull(Game.class.getResource("/org/example/demo/carambola.png")).toExternalForm());
-
-    private static String getBoardState() {
-        StringBuilder boardState = new StringBuilder();
-        for (int row = 0; row < game.row; row++) {
-            for (int col = 0; col < game.col; col++) {
-                boardState.append(game.board[row][col]).append(",");
-            }
-        }
-        return boardState.toString();
-    }
-
 
     private void onGameOver() {
         System.out.println("Game Over! No moves available.");
