@@ -3,6 +3,6 @@
 <?import javafx.scene.control.Button?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="20" style="-fx-background-color: #f0f0f0;">
-    <Label text="Please wait while the game is loading..." style="-fx-font-size: 16px;"/>
-<!--    <Button text="Cancel" onAction="#handleCancel" />-->
+    <Label text="Please wait for opponent to join the game..." style="-fx-font-size: 16px;"/>
+<!--    <Button text="Cancel" onAction="#handleBack" />-->
 </VBox>

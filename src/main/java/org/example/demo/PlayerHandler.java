@@ -1,6 +1,8 @@
 package org.example.demo;
 
 import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +12,8 @@ import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+
+
 public class PlayerHandler implements Runnable {
     private Controller controller; // Controller is initially null
     private Socket socket;
@@ -18,6 +22,8 @@ public class PlayerHandler implements Runnable {
     private volatile boolean active;
     private volatile boolean isPlayerTurn = false;
     private int playerScore = 0;
+
+
 
     public PlayerHandler(Socket socket) {
         this.socket = socket;
@@ -32,7 +38,10 @@ public class PlayerHandler implements Runnable {
     }
 
     public void setController(Controller controller) {
-        this.controller = controller;
+        synchronized (this) {
+            this.controller = controller;
+            notifyAll();
+        }
     }
 
     private BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
@@ -45,6 +54,16 @@ public class PlayerHandler implements Runnable {
             while (active && (message = in.readLine()) != null) {
                 messageQueue.offer(message);
                 System.out.println("Received from server: " + message);
+
+//                synchronized (this) {
+//                    while (controller == null) {
+//                        try {
+//                            wait();
+//                        } catch (InterruptedException e) {
+//                            Thread.currentThread().interrupt();
+//                        }
+//                    }
+//                }
 
                 if(message.startsWith("YOUR_TURN")){
                     isPlayerTurn = true;
@@ -74,6 +93,14 @@ public class PlayerHandler implements Runnable {
                     break;
                 }else if(message.startsWith("YOUR_SCORE:")){
                     playerScore = Integer.parseInt(message.split(" ")[1]);
+                }else if (message.equals("opponent_disconnected")) {
+                    Platform.runLater(() -> controller.updateSmsdis("Opponent has Disconnected"));
+                }
+
+                if(message.equals("YOUR_TURN")){
+                    Platform.runLater(() -> controller.updateSmsdis("Your Turn"));
+                }else if(message.equals("NOT_YOUR_TURN")){
+                    Platform.runLater(() -> controller.updateSmsdis("Not Your Turn"));
                 }
 
 
@@ -99,7 +126,6 @@ public class PlayerHandler implements Runnable {
             close();
         }
     }
-
     public void sendMessage(String message) {
         if (active) {
             out.println(message);

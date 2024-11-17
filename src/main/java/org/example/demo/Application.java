@@ -125,6 +125,9 @@ public class Application extends javafx.application.Application {
             Controller controller = fxmlLoader.getController();
             controller.createGameBoard();
 
+            if (playerHandler != null) {
+                playerHandler.setController(controller);
+            }
 
             Scene scene = new Scene(root, 400, 400);
 

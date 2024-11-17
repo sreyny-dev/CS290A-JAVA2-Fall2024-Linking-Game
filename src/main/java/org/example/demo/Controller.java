@@ -16,18 +16,17 @@ public class Controller {
     @FXML
     public void initialize() {
         score = 0;
+        System.out.println(smsdis+ "is initialized");
     }
+
+    @FXML
+    public Label smsdis;
 
     @FXML
     private Label gameOverMessage;
 
     @FXML
     private Label finalScoreLabel;
-
-
-    public void setGameOverMessage(String message) {
-        gameOverMessage.setText(message);
-    }
 
     @FXML
     private Button backButton;
@@ -42,6 +41,10 @@ public class Controller {
 
     public static Game game;
 
+
+    public void setGameOverMessage(String message) {
+        gameOverMessage.setText(message);
+    }
 
     int[] position = new int[3];
 
@@ -77,7 +80,6 @@ public class Controller {
         }
 
     }
-
 
     private void handleButtonPress(int row, int col) {
 
@@ -119,7 +121,6 @@ public class Controller {
 
             if (change) {
                 score += 10;
-                scoreLabel.setText("Score: " + score);
                 message = "REMOVE:" + row + "," + col + ","+ position[1]+ "," + position[2];
                 playerHandler.sendMessage(message);
                 playerHandler.sendScore(score); // Send the updated score to the server
@@ -128,6 +129,15 @@ public class Controller {
 
         }
     }
+
+    public void updateSmsdis(String message) {
+        if (smsdis != null) {
+            smsdis.setText(message);
+        } else {
+            System.err.println("smsdis is not initialized!");
+        }
+    }
+
 
     //METHOD TO UPDATE THE BOARD
 // Update the board if a valid move is made and items are eaten
@@ -150,7 +160,6 @@ public class Controller {
     }
     public static Image imageReplacement = new Image(Objects.requireNonNull(Game.class.getResource("/org/example/demo/carambola.png")).toExternalForm());
 
-
     @FXML
     private void handleReset() {
         System.out.println("game is reset");
@@ -166,6 +175,10 @@ public class Controller {
         Application.showStartScreen();
 
     }
+
+
+
+
     public ImageView addContent(int content){
         return switch (content) {
             case 0 -> new ImageView(imageCarambola);

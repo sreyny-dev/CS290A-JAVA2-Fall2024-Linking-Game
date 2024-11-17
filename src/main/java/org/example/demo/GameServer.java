@@ -81,7 +81,6 @@ public class GameServer {
         private int[][] boardGame;
 
         private boolean isTurn = false;
-        private int score =0;
 
         public ClientHandler(Socket socket) {
             this.socket = socket;
@@ -123,7 +122,7 @@ public class GameServer {
                 while ((message = in.readLine()) != null) {
                     System.out.println(username + " sent: " + message);
                     if (message.equals("disconnect")) {
-                        System.out.println(username + " has disconnected.");
+                        opponent.out.println("opponent_disconnected");
                         break;
                     }
 
