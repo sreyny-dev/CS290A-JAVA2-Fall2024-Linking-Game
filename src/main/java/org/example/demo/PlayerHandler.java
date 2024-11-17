@@ -17,6 +17,7 @@ public class PlayerHandler implements Runnable {
     private BufferedReader in;
     private volatile boolean active;
     private volatile boolean isPlayerTurn = false;
+    private int playerScore = 0;
 
     public PlayerHandler(Socket socket) {
         this.socket = socket;
@@ -71,6 +72,8 @@ public class PlayerHandler implements Runnable {
                         }
                     });
                     break;
+                }else if(message.startsWith("YOUR_SCORE:")){
+                    playerScore = Integer.parseInt(message.split(" ")[1]);
                 }
 
 
@@ -126,6 +129,10 @@ public class PlayerHandler implements Runnable {
     }
     public boolean isPlayerTurn() {
         return isPlayerTurn;
+    }
+
+    public void sendScore(int score){
+        sendMessage("SCORE: " + score);
     }
 
     public static int[][] parseBoardData(String boardContent) {

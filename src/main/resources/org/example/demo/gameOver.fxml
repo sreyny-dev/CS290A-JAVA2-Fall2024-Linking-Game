@@ -8,8 +8,7 @@
 
 
     <Label fx:id="gameOverMessage" text="Game Over!" style="-fx-font-size: 24px; -fx-text-fill: red;"/>
-    <Label fx:id="finalScoreLabel" text="Score: 0" style="-fx-font-size: 18px;"/>
 
-<!--    <Button text="Back" fx:id="backButton" onAction="#handleBack"/>-->
+    <Button text="Back" fx:id="backButton" onAction="#handleBack"/>
 
 </VBox>

@@ -24,9 +24,6 @@ public class Controller {
     @FXML
     private Label finalScoreLabel;
 
-    public void setScore(int score) {
-        finalScoreLabel.setText("Score: " + score);
-    }
 
     public void setGameOverMessage(String message) {
         gameOverMessage.setText(message);
@@ -78,7 +75,9 @@ public class Controller {
                 gameBoard.add(button, col, row);
             }
         }
+
     }
+
 
     private void handleButtonPress(int row, int col) {
 
@@ -116,12 +115,15 @@ public class Controller {
             if (!game.hasAvailableMoves()){
                 message = "GAME_OVER";
                 playerHandler.sendMessage(message);
-//                onGameOver();
             }
 
             if (change) {
+                score += 10;
+                scoreLabel.setText("Score: " + score);
                 message = "REMOVE:" + row + "," + col + ","+ position[1]+ "," + position[2];
                 playerHandler.sendMessage(message);
+                playerHandler.sendScore(score); // Send the updated score to the server
+                scoreLabel.setText(String.valueOf(score)); // Update the local UI
             }
 
         }
@@ -160,33 +162,6 @@ public class Controller {
     }
 
     public void handleBack() throws IOException {
-//        try {
-//            // Load the StartScreen.fxml
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("StartScreen.fxml"));
-//            Parent startScreenRoot = loader.load();
-//
-//            // Cast the root node to VBox to set the background
-//            VBox root = (VBox) startScreenRoot;
-//
-//            // Load and set the background image
-//            BackgroundImage backgroundImage = new BackgroundImage(
-//                    new Image(getClass().getResource("/org/example/demo/bg.png").toExternalForm()),
-//                    BackgroundRepeat.NO_REPEAT,
-//                    BackgroundRepeat.NO_REPEAT,
-//                    BackgroundPosition.CENTER,
-//                    new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
-//            );
-//
-//            root.setBackground(new Background(backgroundImage));
-//
-//            // Get the current stage and set the new scene
-//            Stage stage = (Stage) backButton.getScene().getWindow();
-//            stage.setScene(new Scene(root, 400, 400)); // Set scene size as needed
-//            stage.setTitle("Select Board Size");
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         Application.showStartScreen();
 

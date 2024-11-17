@@ -139,6 +139,11 @@ public class GameServer {
                         passTurnToOpponent(this);
                     }
 
+                    if(message.startsWith("SCORE:")){
+                        String score = message.substring("SCORE:".length());
+                        this.out.println("YOUR_SCORE:" + score);
+                    }
+
                     if(message.startsWith("GAME_OVER")){
                         this.out.println("YOU_LOSE");
                         opponent.out.println("YOU_WIN");

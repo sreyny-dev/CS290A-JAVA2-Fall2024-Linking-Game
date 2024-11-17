@@ -172,6 +172,7 @@ public class Application extends javafx.application.Application {
 //        controller.setScore(score);
         controller.setGameOverMessage("YOU LOSE");
 
+
         VBox root = (VBox) rootParent;
         Scene scene = new Scene(root, 400, 400);
         primaryStage.setScene(scene);

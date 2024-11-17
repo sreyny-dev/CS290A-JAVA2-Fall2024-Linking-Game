@@ -25,8 +25,6 @@ public class Game {
             return false;
         }
 
-
-
         if ((board[row1][col1] != board[row2][col2]) || (row1 == row2 && col1 == col2)) {
             return false;
         }
@@ -96,8 +94,13 @@ public class Game {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 // Skip empty cells
-                if (board[i][j] == 0) continue;
+                if (board[i][j] == 0) {
+                    continue;}
 
+                //if only one element left, game over
+                if(countElement() <=1){
+                    return false;
+                }
                 // Check each piece for a possible match with any other piece
                 for (int x = 0; x < row; x++) {
                     for (int y = 0; y < col; y++) {
@@ -110,9 +113,23 @@ public class Game {
                         }
                     }
                 }
+
             }
         }
         return false; // No moves available
+    }
+
+    //count number of non-zero element in the game
+    public int countElement(){
+        int count = 0;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (board[i][j] != 0) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
 }
