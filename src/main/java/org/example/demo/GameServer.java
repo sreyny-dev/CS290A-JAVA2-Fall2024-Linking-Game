@@ -139,7 +139,7 @@ public class GameServer {
                         String boardState = message.substring("REMOVE:".length());  // Extract board state
                         String updatedBoard = "UPDATED_BOARD:" + boardState;
                         this.out.println(updatedBoard);
-                        opponent.out.println("UPDATED_BOARD:" + boardState);
+                        opponent.out.println(updatedBoard);
                     }
             }
             } catch (IOException e) {

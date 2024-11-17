@@ -123,7 +123,6 @@ public class Controller {
 
                 message = "REMOVE:" + row + "," + col + ","+ position[1]+ "," + position[2];
                 playerHandler.sendMessage(message);
-                playerHandler.sendMessage(message);
 
 //                updateBoard(position[1], position[2], row, col);
 
