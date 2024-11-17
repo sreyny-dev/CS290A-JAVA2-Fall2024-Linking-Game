@@ -43,7 +43,7 @@ public class Application extends javafx.application.Application {
     }
 
 
-    public void showStartScreen() throws IOException {
+    public static void showStartScreen() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("StartScreen.fxml"));
 
         Parent rootParent = fxmlLoader.load();
@@ -51,7 +51,7 @@ public class Application extends javafx.application.Application {
 
         // Load the background image
         BackgroundImage backgroundImage = new BackgroundImage(
-                new Image(getClass().getResource("/org/example/demo/bg.png").toExternalForm()),
+                new Image(Application.class.getResource("/org/example/demo/bg.png").toExternalForm()),
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.CENTER,
@@ -75,6 +75,7 @@ public class Application extends javafx.application.Application {
         primaryStage.setTitle("Login");
         primaryStage.show();
     }
+
     public static void showWaitingScreen(int rows, int columns) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("waitingScreen.fxml"));
         VBox root = fxmlLoader.load();
@@ -112,8 +113,6 @@ public class Application extends javafx.application.Application {
         }).start();
     }
 
-
-
         public static void showGameScreen(String boardDataFromServer) {
         try {
 
@@ -138,6 +137,48 @@ public class Application extends javafx.application.Application {
             e.printStackTrace();
         }
     }
+
+    public static void onGameOverWinner() throws IOException {
+        System.out.println("Game Over! No moves available.");
+
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gameOver.fxml"));
+
+        Parent rootParent = fxmlLoader.load();
+
+
+        // Get the controller and pass data
+        Controller controller = fxmlLoader.getController();
+//        controller.setScore(score);
+        controller.setGameOverMessage("YOU WIN");
+
+        VBox root = (VBox) rootParent;
+        Scene scene = new Scene(root, 400, 400);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Game Over!");
+        primaryStage.show();
+    }
+
+    public static void onGameOverLoser() throws IOException {
+
+        System.out.println("Game Over! No moves available.");
+
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gameOver.fxml"));
+
+        Parent rootParent = fxmlLoader.load();
+
+
+        // Get the controller and pass data
+        Controller controller = fxmlLoader.getController();
+//        controller.setScore(score);
+        controller.setGameOverMessage("YOU LOSE");
+
+        VBox root = (VBox) rootParent;
+        Scene scene = new Scene(root, 400, 400);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Game Over!");
+        primaryStage.show();
+    }
+
     public static void setPlayerHandler(PlayerHandler handler) {
         playerHandler = handler; // Allow other classes to set the player handler
     }

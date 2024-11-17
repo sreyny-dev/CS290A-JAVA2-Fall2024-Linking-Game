@@ -28,7 +28,6 @@ public class StartScreenController {
     @FXML
     private void handleBoard4x4() throws IOException {
         Application.showWaitingScreen(4,4);
-//        Application.showGameScreen(4, 4);
     }
 
     @FXML

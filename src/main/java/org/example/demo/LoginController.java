@@ -52,9 +52,9 @@ public class LoginController {
         if(users.containsKey(usernameInput)){
             String storedPassword = users.get(usernameInput);
             if(storedPassword!= null && storedPassword.equals(passwordInput)){
-                Application app = new Application();
+//                Application app = new Application();
                 connectToServer(usernameInput);
-                app.showStartScreen();
+                Application.showStartScreen();
             }else{
                 loginMessage.setText("Invalid Password");
             }

@@ -16,6 +16,7 @@ public class PlayerHandler implements Runnable {
     private PrintWriter out;
     private BufferedReader in;
     private volatile boolean active;
+    private volatile boolean isPlayerTurn = false;
 
     public PlayerHandler(Socket socket) {
         this.socket = socket;
@@ -44,19 +45,33 @@ public class PlayerHandler implements Runnable {
                 messageQueue.offer(message);
                 System.out.println("Received from server: " + message);
 
-
-//                if (message.startsWith("YOUR_TURN")) {
-//                    // Handle the player's turn
-//                    if (controller != null) {
-//                        // Allow player to make a move on the UI
-//                        Platform.runLater(() -> controller.enableMoves());
-//                    }
-//                } else if (message.startsWith("NOT_YOUR_TURN")) {
-//                    // Notify player that it's not their turn
-//                    if (controller != null) {
-//                        Platform.runLater(() -> controller.disableMoves());
-//                    }
-//                }
+                if(message.startsWith("YOUR_TURN")){
+                    isPlayerTurn = true;
+                    System.out.println("it is your turn");
+                }else if(message.startsWith("NOT_YOUR_TURN")){
+                    isPlayerTurn = false;
+                    System.out.println("It is not your turn");
+                }else if(message.equals("YOU_WIN")){
+                    System.out.println("You Win!");
+                    Platform.runLater(() -> {
+                        try {
+                            Application.onGameOverWinner();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                    break;
+                }else if(message.equals("YOU_LOSE")){
+                    System.out.println("You Lose!");
+                    Platform.runLater(() -> {
+                        try {
+                            Application.onGameOverLoser();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                    break;
+                }
 
 
                 if (message.startsWith("UPDATED_BOARD:")) {
@@ -109,6 +124,9 @@ public class PlayerHandler implements Runnable {
     public String getNextMessage() throws InterruptedException {
         return messageQueue.take();
     }
+    public boolean isPlayerTurn() {
+        return isPlayerTurn;
+    }
 
     public static int[][] parseBoardData(String boardContent) {
         String data = boardContent.replace("BOARD:", "");
@@ -124,4 +142,5 @@ public class PlayerHandler implements Runnable {
         }
         return board;
     }
+
 }

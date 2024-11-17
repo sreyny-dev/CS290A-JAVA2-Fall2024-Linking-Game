@@ -1,30 +1,21 @@
 package org.example.demo;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 
-
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
 import java.io.*;
 import java.util.Objects;
-
-import javafx.scene.layout.VBox;
-
 
 public class Controller {
     private static PlayerHandler playerHandler;
     @FXML
     public void initialize() {
         score = 0;
-//        scoreLabel.setText("0");
     }
 
     @FXML
@@ -91,6 +82,13 @@ public class Controller {
 
     private void handleButtonPress(int row, int col) {
 
+        //check the turn
+        if(!playerHandler.isPlayerTurn()){
+            System.out.println("It is not your turn");
+            return;
+        }
+
+
         if (game.board[row][col] == 0) {
             System.out.println("Ignored click on empty cell at: " + row + ", " + col);
             return; // Exit the method without doing anything
@@ -116,16 +114,14 @@ public class Controller {
             position[0] = 0;
 
             if (!game.hasAvailableMoves()){
-                onGameOver();
+                message = "GAME_OVER";
+                playerHandler.sendMessage(message);
+//                onGameOver();
             }
 
             if (change) {
-
                 message = "REMOVE:" + row + "," + col + ","+ position[1]+ "," + position[2];
                 playerHandler.sendMessage(message);
-
-//                updateBoard(position[1], position[2], row, col);
-
             }
 
         }
@@ -149,38 +145,9 @@ public class Controller {
 
         buttons[row1][col1].setGraphic(firstReplacementImageView);
         buttons[row2][col2].setGraphic(secondReplacementImageView);
-
-        score += 10;
-//
-//        // Check if scoreLabel is initialized
-//        if (scoreLabel != null) {
-//            scoreLabel.setText(String.valueOf(score));
-//        } else {
-//            System.out.println("scoreLabel is null");
-//        }
     }
     public static Image imageReplacement = new Image(Objects.requireNonNull(Game.class.getResource("/org/example/demo/carambola.png")).toExternalForm());
 
-    private void onGameOver() {
-        System.out.println("Game Over! No moves available.");
-        System.out.println(score);
-
-        try {
-            // Load the GameOver.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("gameOver.fxml"));
-            Parent gameOverRoot = loader.load();
-            Controller gameOverController = loader.getController();
-            gameOverController.setScore(score);
-            gameOverController.setGameOverMessage("You Lose");
-            // Load the GameOver scene
-            Stage stage = (Stage) backButton.getScene().getWindow();
-            stage.setScene(new Scene(gameOverRoot));
-            stage.setTitle("Game Over!");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     private void handleReset() {
@@ -192,34 +159,37 @@ public class Controller {
         scoreLabel.setText("0");
     }
 
-    public void handleBack() {
-        try {
-            // Load the StartScreen.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("StartScreen.fxml"));
-            Parent startScreenRoot = loader.load();
+    public void handleBack() throws IOException {
+//        try {
+//            // Load the StartScreen.fxml
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("StartScreen.fxml"));
+//            Parent startScreenRoot = loader.load();
+//
+//            // Cast the root node to VBox to set the background
+//            VBox root = (VBox) startScreenRoot;
+//
+//            // Load and set the background image
+//            BackgroundImage backgroundImage = new BackgroundImage(
+//                    new Image(getClass().getResource("/org/example/demo/bg.png").toExternalForm()),
+//                    BackgroundRepeat.NO_REPEAT,
+//                    BackgroundRepeat.NO_REPEAT,
+//                    BackgroundPosition.CENTER,
+//                    new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
+//            );
+//
+//            root.setBackground(new Background(backgroundImage));
+//
+//            // Get the current stage and set the new scene
+//            Stage stage = (Stage) backButton.getScene().getWindow();
+//            stage.setScene(new Scene(root, 400, 400)); // Set scene size as needed
+//            stage.setTitle("Select Board Size");
+//            stage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-            // Cast the root node to VBox to set the background
-            VBox root = (VBox) startScreenRoot;
+        Application.showStartScreen();
 
-            // Load and set the background image
-            BackgroundImage backgroundImage = new BackgroundImage(
-                    new Image(getClass().getResource("/org/example/demo/bg.png").toExternalForm()),
-                    BackgroundRepeat.NO_REPEAT,
-                    BackgroundRepeat.NO_REPEAT,
-                    BackgroundPosition.CENTER,
-                    new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
-            );
-
-            root.setBackground(new Background(backgroundImage));
-
-            // Get the current stage and set the new scene
-            Stage stage = (Stage) backButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 400, 400)); // Set scene size as needed
-            stage.setTitle("Select Board Size");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     public ImageView addContent(int content){
         return switch (content) {

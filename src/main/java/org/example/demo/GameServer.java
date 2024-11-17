@@ -60,14 +60,6 @@ public class GameServer {
         System.out.println("Sent MATCH_FOUND and board to both players.");
     }
 
-
-    private static synchronized void passTurnToOpponent(ClientHandler currentPlayer) {
-        currentPlayer.setTurn(false);
-        currentPlayer.opponent.setTurn(true);
-        currentPlayer.out.println("NOT_YOUR_TURN");
-        currentPlayer.opponent.out.println("YOUR_TURN");
-    }
-
     private static int[][] generateBoard(int rows, int cols) {
         int[][] board = new int[rows][cols];
         Random random = new Random();
@@ -136,10 +128,21 @@ public class GameServer {
                     }
 
                     if(message.startsWith("REMOVE:")){
+                        if(!isTurn){
+                            out.println("NOT_YOUR_TURN");
+                            continue;
+                        }
                         String boardState = message.substring("REMOVE:".length());  // Extract board state
                         String updatedBoard = "UPDATED_BOARD:" + boardState;
                         this.out.println(updatedBoard);
                         opponent.out.println(updatedBoard);
+                        passTurnToOpponent(this);
+                    }
+
+                    if(message.startsWith("GAME_OVER")){
+                        this.out.println("YOU_LOSE");
+                        opponent.out.println("YOU_WIN");
+                        break;
                     }
             }
             } catch (IOException e) {
@@ -163,9 +166,12 @@ public class GameServer {
             }
             return sb.toString();
         }
-        private void passTurnToOpponent() {
-            isTurn = false;
-            opponent.setTurn(true); // Pass the turn to the opponent
+        private static synchronized void passTurnToOpponent(ClientHandler currentPlayer) {
+            currentPlayer.setTurn(false);
+            currentPlayer.opponent.setTurn(true); // Pass the turn to the opponent
+
+            currentPlayer.out.println("NOT_YOUR_TURN");
+            currentPlayer.opponent.out.println("YOUR_TURN");
         }
 
     }
