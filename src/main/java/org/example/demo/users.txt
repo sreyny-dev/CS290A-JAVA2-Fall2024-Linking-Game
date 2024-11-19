@@ -4,3 +4,4 @@ jjk,r
 sreyny,n
 mar,1
 c,1
+fitira,1

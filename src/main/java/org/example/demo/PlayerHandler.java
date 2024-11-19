@@ -1,8 +1,6 @@
 package org.example.demo;
 
 import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,16 +52,6 @@ public class PlayerHandler implements Runnable {
             while (active && (message = in.readLine()) != null) {
                 messageQueue.offer(message);
                 System.out.println("Received from server: " + message);
-
-//                synchronized (this) {
-//                    while (controller == null) {
-//                        try {
-//                            wait();
-//                        } catch (InterruptedException e) {
-//                            Thread.currentThread().interrupt();
-//                        }
-//                    }
-//                }
 
                 if(message.startsWith("YOUR_TURN")){
                     isPlayerTurn = true;

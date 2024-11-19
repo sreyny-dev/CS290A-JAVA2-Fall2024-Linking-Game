@@ -8,13 +8,31 @@ public class GameServer {
     private static final int PORT = 4444;
 
     private static Map<String, Queue<ClientHandler>> waitingPlayers = new HashMap<>();
+    private static List<ClientHandler> connectedPlayers = Collections.synchronizedList(new ArrayList<>());
+
 
     public static void main(String[] args) {
         System.out.println("Game server started...");
-
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Server is shutting down...");
+            synchronized (connectedPlayers) {
+                for (ClientHandler player : connectedPlayers) {
+                    try {
+                        player.out.println("SERVER_SHUTDOWN");
+                        player.socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }));
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             while (true) {
-                new ClientHandler(serverSocket.accept()).start();
+                ClientHandler clientHandler = new ClientHandler(serverSocket.accept());
+                synchronized (connectedPlayers) {
+                    connectedPlayers.add(clientHandler);
+                }
+                clientHandler.start();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,6 +70,9 @@ public class GameServer {
 
         player1.setTurn(true);
         player2.setTurn(false);
+
+        player1.out.println("YOUR_TURN");
+        player2.out.println("NOT_YOUR_TURN");
 
         // Send the board to both players
         player1.sendBoard(boardGame);
