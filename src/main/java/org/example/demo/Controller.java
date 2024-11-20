@@ -16,7 +16,6 @@ public class Controller {
     @FXML
     public void initialize() {
         score = 0;
-        System.out.println(smsdis+ "is initialized");
     }
 
     @FXML

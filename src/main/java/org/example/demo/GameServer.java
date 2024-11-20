@@ -100,6 +100,7 @@ public class GameServer {
         private String boardSize;
         private ClientHandler opponent;
         private int[][] boardGame;
+        private static int actionsInTurn = 0;
 
         private boolean isTurn = false;
 
@@ -146,12 +147,16 @@ public class GameServer {
                         opponent.out.println("opponent_disconnected");
                         break;
                     }
+                    if (message.startsWith("PRESS:")){
+                        actionsInTurn++;
+                    }
+
+                    if (actionsInTurn >= 2) {
+                        passTurnToOpponent(this);
+                    }
 
                     if(message.startsWith("REMOVE:")){
-                        if(!isTurn){
-                            out.println("NOT_YOUR_TURN");
-                            continue;
-                        }
+
                         String boardState = message.substring("REMOVE:".length());  // Extract board state
                         String updatedBoard = "UPDATED_BOARD:" + boardState;
                         this.out.println(updatedBoard);
@@ -197,6 +202,7 @@ public class GameServer {
 
             currentPlayer.out.println("NOT_YOUR_TURN");
             currentPlayer.opponent.out.println("YOUR_TURN");
+            actionsInTurn = 0;
         }
 
     }
