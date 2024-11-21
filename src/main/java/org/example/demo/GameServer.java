@@ -3,6 +3,7 @@ package org.example.demo;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameServer {
     private static final int PORT = 4444;
@@ -41,7 +42,13 @@ public class GameServer {
 
     private static synchronized void addPlayerToQueue(ClientHandler player, String boardSize) {
         Queue<ClientHandler> queue = waitingPlayers.computeIfAbsent(boardSize, k -> new LinkedList<>());
-        queue.add(player);
+
+        if (!queue.contains(player)) {
+            queue.add(player);
+        }
+
+        queue.removeIf(client -> client.socket.isClosed());
+
 
         if (queue.size() >= 2) {
             // Match two players and pass boardSize to startGame
@@ -101,6 +108,7 @@ public class GameServer {
         private ClientHandler opponent;
         private int[][] boardGame;
         private static int actionsInTurn = 0;
+        private ArrayList<String> tempCoordinates =  new ArrayList<>();
 
         private boolean isTurn = false;
 
@@ -131,7 +139,7 @@ public class GameServer {
 
                 // Read username and board size from client
                 username = in.readLine();
-                System.out.println(username+ "connected to the server...");
+                System.out.println(username+ " connected to the server...");
 
                 boardSize = in.readLine(); // e.g., "4x4", "6x8", "8x8"
                 System.out.println(username + " selected board size " + boardSize);
@@ -142,16 +150,41 @@ public class GameServer {
                 // Wait for further commands or disconnection
                 String message;
                 while ((message = in.readLine()) != null) {
+
+
                     System.out.println(username + " sent: " + message);
+
+
                     if (message.equals("disconnect")) {
-                        opponent.out.println("opponent_disconnected");
+                        handleDisconnection();
                         break;
+
                     }
                     if (message.startsWith("PRESS:")){
                         actionsInTurn++;
+                        String[] values = message.split(":")[1].split(",");
+                        for(String value : values){
+                            tempCoordinates.add(value);
+                        }
                     }
 
                     if (actionsInTurn >= 2) {
+
+                        StringBuilder sb = new StringBuilder();
+                        for (int i = 0; i < tempCoordinates.size(); i++) {
+                            sb.append(tempCoordinates.get(i));
+                            if (i < tempCoordinates.size() - 1) {
+                                sb.append(","); // Add a comma between elements
+                            }
+                        }
+
+                        String lineCoordinate = sb.toString();
+                        String drawLineMessage = "DRAW_LINE:"+lineCoordinate;
+                        this.out.println(drawLineMessage);       // Notify the player
+                        if(opponent!=null) {
+                            opponent.out.println(drawLineMessage);  // Notify the opponent
+                        }
+                        tempCoordinates.clear();
                         passTurnToOpponent(this);
                     }
 
@@ -168,13 +201,29 @@ public class GameServer {
                         String score = message.substring("SCORE:".length());
                         this.out.println("YOUR_SCORE:" + score);
                     }
+//
+//                    if(message.startsWith("GAME_OVER")){
+//                        this.out.println("YOU_LOSE");
+//                        opponent.out.println("YOU_WIN");
+//                        break;
+//                    }
 
-                    if(message.startsWith("GAME_OVER")){
+                    if (message.startsWith("GAME_OVER")) {
                         this.out.println("YOU_LOSE");
+                        System.out.println(username+" lose");
+                        System.out.println(opponent.username+" win");
                         opponent.out.println("YOU_WIN");
-                        break;
+
+                        // Reset both players
+                        this.resetGame();
+                        if (opponent != null) {
+                            opponent.resetGame();
+                        }
+                        continue; // Continue listening for new messages
                     }
-            }
+
+
+                }
             } catch (IOException e) {
                 System.out.println("Client disconnected: " + socket.getInetAddress().getHostAddress());
             } finally {
@@ -186,6 +235,46 @@ public class GameServer {
             }
         }
 
+        public void resetGame() {
+            this.boardGame = null;  // Clear the game board
+            this.opponent = null;   // Clear the opponent reference
+            this.isTurn = false;    // Reset turn state
+            actionsInTurn = 0;      // Reset actions
+            tempCoordinates.clear(); // Clear temporary data
+
+            // Notify the player
+            out.println("GAME_RESET");
+            out.println("Do you want to play again? Type 'rematch' or 'disconnect'");
+        }
+
+        private void handleDisconnection() {
+            System.out.println(username + " is disconnecting...");
+
+            synchronized (connectedPlayers) {
+                connectedPlayers.remove(this); // Remove from connected players
+            }
+
+            synchronized (waitingPlayers) {
+                Queue<ClientHandler> queue = waitingPlayers.get(boardSize);
+                if (queue != null) {
+                    queue.remove(this); // Remove from matchmaking queue
+                    if (queue.isEmpty()) {
+                        waitingPlayers.remove(boardSize); // Clean up empty queues
+                    }
+                }
+            }
+
+            if (opponent != null) {
+                opponent.out.println("opponent_disconnected"); // Notify opponent
+                opponent.opponent = null;
+            }
+
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         private static String convertBoardToString(int[][] board) {
             StringBuilder sb = new StringBuilder();
             for (int[] row : board) {

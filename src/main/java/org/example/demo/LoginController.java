@@ -32,6 +32,7 @@ public class LoginController {
     @FXML
     private Label registerMessage;
 
+    private Controller controller;
 
     private PlayerHandler playerHandler;
 
@@ -54,6 +55,7 @@ public class LoginController {
             if(storedPassword!= null && storedPassword.equals(passwordInput)){
 //                Application app = new Application();
                 connectToServer(usernameInput);
+                Application.setLoggedInUsername(usernameInput);
                 Application.showStartScreen();
             }else{
                 loginMessage.setText("Invalid Password");
@@ -76,6 +78,8 @@ public class LoginController {
             playerHandler.sendMessage(username);
 
             Application.setPlayerHandler(playerHandler); // Set the player handler
+            // Pass the username to the GameController
+
 
         } catch (IOException e) {
             e.printStackTrace();

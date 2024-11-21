@@ -1,12 +1,18 @@
 package org.example.demo;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.util.Duration;
 
 import java.io.*;
 import java.util.Objects;
@@ -17,6 +23,9 @@ public class Controller {
     public void initialize() {
         score = 0;
     }
+
+    @FXML
+    private Label usernameLabel;
 
     @FXML
     public Label smsdis;
@@ -40,6 +49,9 @@ public class Controller {
 
     public static Game game;
 
+    public void setUsername(String username) {
+        usernameLabel.setText(username);
+    }
 
     public void setGameOverMessage(String message) {
         gameOverMessage.setText(message);
@@ -175,7 +187,61 @@ public class Controller {
 
     }
 
+    public void drawLineBetweenButtons(int row1, int col1, int row2, int col2) {
+        // Calculate button positions
+//        Button button1 = buttons[row1][col1];
+//        Button button2 = buttons[row2][col2];
+//        Bounds bounds1 = button1.localToScene(button1.getBoundsInLocal());
+//        Bounds bounds2 = button2.localToScene(button2.getBoundsInLocal());
+//
+//        double startX = bounds1.getMinX() + bounds1.getWidth() / 2;
+//        double startY = bounds1.getMinY() + bounds1.getHeight() / 2;
+//        double endX = bounds2.getMinX() + bounds2.getWidth() / 2;
+//        double endY = bounds2.getMinY() + bounds2.getHeight() / 2;
+//
+//        if (row1 == row2) {
+//            // Case 1: Same row (horizontal straight line)
+//            Line line = new Line(startX, startY, endX, endY);
+//            line.setStrokeWidth(2);
+//            line.setStroke(Color.RED);
+//            gameBoard.getChildren().add(line);
+//            removeLineWithDelay(line);
+//
+//        } else if (col1 == col2) {
+//            // Case 2: Same column (vertical straight line)
+//            Line line = new Line(startX, startY, endX, endY);
+//            line.setStrokeWidth(2);
+//            line.setStroke(Color.RED);
+//            gameBoard.getChildren().add(line);
+//            removeLineWithDelay(line);
+//
+//        } else {
+//            // Case 3: L-shape connection
+//            // Check possible intermediate points
+//            double midX = startX;
+//            double midY = endY;
+//
+//            // Create two lines to form an L-shape
+//            Line firstSegment = new Line(startX, startY, midX, midY);
+//            Line secondSegment = new Line(midX, midY, endX, endY);
+//
+//            firstSegment.setStrokeWidth(2);
+//            firstSegment.setStroke(Color.RED);
+//            secondSegment.setStrokeWidth(2);
+//            secondSegment.setStroke(Color.RED);
+//
+//            gameBoard.getChildren().addAll(firstSegment, secondSegment);
+//            removeLineWithDelay(firstSegment);
+//            removeLineWithDelay(secondSegment);
+//        }
+    }
 
+    // Utility method to remove a line after a short delay
+    private void removeLineWithDelay(Node line) {
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> gameBoard.getChildren().remove(line));
+        delay.play();
+    }
 
 
     public ImageView addContent(int content){

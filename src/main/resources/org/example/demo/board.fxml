@@ -7,6 +7,8 @@
 
 <VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.demo.Controller">
   <HBox spacing="10" alignment="CENTER">
+    <Label text="Username:" />
+    <Label fx:id="usernameLabel" layoutX="10" layoutY="10" text="_" />
     <Label text="Score: " />
     <Label fx:id="scoreLabel" text="0" />
   </HBox>

@@ -18,6 +18,17 @@ public class Application extends javafx.application.Application {
     private static Stage primaryStage;
     private static PlayerHandler playerHandler;
 
+    private static String loggedInUsername;
+
+    public static void setLoggedInUsername(String username) {
+        loggedInUsername = username;
+    }
+
+    public static String getLoggedInUsername() {
+        return loggedInUsername;
+    }
+
+
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -124,6 +135,7 @@ public class Application extends javafx.application.Application {
             // Access the controller to initialize the game board
             Controller controller = fxmlLoader.getController();
             controller.createGameBoard();
+            controller.setUsername(getLoggedInUsername());
 
             if (playerHandler != null) {
                 playerHandler.setController(controller);
@@ -151,7 +163,6 @@ public class Application extends javafx.application.Application {
 
         // Get the controller and pass data
         Controller controller = fxmlLoader.getController();
-//        controller.setScore(score);
         controller.setGameOverMessage("Victory");
 
         VBox root = (VBox) rootParent;
@@ -172,7 +183,6 @@ public class Application extends javafx.application.Application {
 
         // Get the controller and pass data
         Controller controller = fxmlLoader.getController();
-//        controller.setScore(score);
         controller.setGameOverMessage("Defeat");
 
 

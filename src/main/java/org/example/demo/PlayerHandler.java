@@ -52,12 +52,18 @@ public class PlayerHandler implements Runnable {
             while (active && (message = in.readLine()) != null) {
                 messageQueue.offer(message);
                 System.out.println("Received from server: " + message);
-
+//                if(message.equals("YOUR_TURN")){
+//                    Platform.runLater(() -> controller.updateSmsdis("Your Turn"));
+//                }else if(message.equals("NOT_YOUR_TURN")){
+//                    Platform.runLater(() -> controller.updateSmsdis("Not Your Turn"));
+//                }
                 if(message.startsWith("YOUR_TURN")){
                     isPlayerTurn = true;
+                    Platform.runLater(() -> controller.updateSmsdis("Your Turn"));
                     System.out.println("it is your turn");
                 }else if(message.startsWith("NOT_YOUR_TURN")){
                     isPlayerTurn = false;
+                    Platform.runLater(() -> controller.updateSmsdis("Not Your Turn"));
                     System.out.println("It is not your turn");
                 }else if(message.equals("YOU_WIN")){
                     System.out.println("You Win!");
@@ -85,10 +91,14 @@ public class PlayerHandler implements Runnable {
                     Platform.runLater(() -> controller.updateSmsdis("Opponent has Disconnected"));
                 }
 
-                if(message.equals("YOUR_TURN")){
-                    Platform.runLater(() -> controller.updateSmsdis("Your Turn"));
-                }else if(message.equals("NOT_YOUR_TURN")){
-                    Platform.runLater(() -> controller.updateSmsdis("Not Your Turn"));
+                if (message.startsWith("DRAW_LINE:")) {
+                    String[] coords = message.substring("DRAW_LINE:".length()).split(",");
+                    int row1 = Integer.parseInt(coords[0]);
+                    int col1 = Integer.parseInt(coords[1]);
+                    int row2 = Integer.parseInt(coords[2]);
+                    int col2 = Integer.parseInt(coords[3]);
+
+                    Platform.runLater(() -> controller.drawLineBetweenButtons(row1, col1, row2, col2));
                 }
 
 
@@ -120,17 +130,31 @@ public class PlayerHandler implements Runnable {
         }
     }
 
+//    public void close() {
+//        if (!active) return;
+//        try {
+//            active = false;
+//            if (in != null) in.close();
+//            if (out != null) out.close();
+//            if (socket != null && !socket.isClosed()) socket.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     public void close() {
-        if (!active) return;
+        if (!active) return; // Avoid double-closing
+        active = false;
         try {
-            active = false;
             if (in != null) in.close();
             if (out != null) out.close();
             if (socket != null && !socket.isClosed()) socket.close();
+            System.out.println("Handler closed successfully.");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     public void sendBoardSize(int rows, int columns) {
         if (active) {

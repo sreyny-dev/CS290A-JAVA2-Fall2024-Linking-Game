@@ -1,7 +1,7 @@
 n,1
 d,1
-jjk,r
-sreyny,n
+jjk,1
+sreyny,1
 mar,1
 c,1
 fitira,1
