@@ -52,19 +52,13 @@ public class PlayerHandler implements Runnable {
             while (active && (message = in.readLine()) != null) {
                 messageQueue.offer(message);
                 System.out.println("Received from server: " + message);
-//                if(message.equals("YOUR_TURN")){
-//                    Platform.runLater(() -> controller.updateSmsdis("Your Turn"));
-//                }else if(message.equals("NOT_YOUR_TURN")){
-//                    Platform.runLater(() -> controller.updateSmsdis("Not Your Turn"));
-//                }
+
                 if(message.startsWith("YOUR_TURN")){
                     isPlayerTurn = true;
                     Platform.runLater(() -> controller.updateSmsdis("Your Turn"));
-                    System.out.println("it is your turn");
                 }else if(message.startsWith("NOT_YOUR_TURN")){
                     isPlayerTurn = false;
                     Platform.runLater(() -> controller.updateSmsdis("Not Your Turn"));
-                    System.out.println("It is not your turn");
                 }else if(message.equals("YOU_WIN")){
                     System.out.println("You Win!");
                     Platform.runLater(() -> {

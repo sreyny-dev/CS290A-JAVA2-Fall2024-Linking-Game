@@ -139,6 +139,12 @@ public class Application extends javafx.application.Application {
 
             if (playerHandler != null) {
                 playerHandler.setController(controller);
+                if(playerHandler.isPlayerTurn()){
+                    controller.updateSmsdis("Your Turn");
+                }else{
+                    controller.updateSmsdis("Not Your Turn");
+                }
+
             }
 
             Scene scene = new Scene(root, 400, 400);

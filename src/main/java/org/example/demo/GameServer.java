@@ -75,11 +75,15 @@ public class GameServer {
         player1.setGame(boardGame, player2);
         player2.setGame(boardGame, player1);
 
+//        player1.isTurn = true;
+//        player2.isTurn = false;
+
+
         player1.setTurn(true);
         player2.setTurn(false);
 
-        player1.out.println("YOUR_TURN");
-        player2.out.println("NOT_YOUR_TURN");
+//        player1.out.println("YOUR_TURN");
+//        player2.out.println("NOT_YOUR_TURN");
 
         // Send the board to both players
         player1.sendBoard(boardGame);
@@ -128,7 +132,6 @@ public class GameServer {
 
         public void sendBoard(int[][] board) {
             String boardConfig = convertBoardToString(board); // Convert board to string for sending
-            out.println("MATCH_FOUND");
             out.println("BOARD:" + boardConfig);
         }
 

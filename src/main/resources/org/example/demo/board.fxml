@@ -16,7 +16,7 @@
   <GridPane fx:id="gameBoard" VBox.vgrow="ALWAYS" hgap="5" vgap="5">
   </GridPane>
 <HBox spacing="10" alignment="CENTER">
-  <Label fx:id="smsdis" text="_" style="-fx-font-size: 16px;-fx-text-fill: red;"/>
+  <Label fx:id="smsdis" text="message..." style="-fx-font-size: 16px;-fx-text-fill: red;"/>
 </HBox>
   <HBox spacing="10" alignment="CENTER">
     <Button text="Reset" fx:id="resetButton" onAction="#handleReset"/>
