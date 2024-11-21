@@ -152,7 +152,7 @@ public class Application extends javafx.application.Application {
         // Get the controller and pass data
         Controller controller = fxmlLoader.getController();
 //        controller.setScore(score);
-        controller.setGameOverMessage("YOU WIN");
+        controller.setGameOverMessage("Victory");
 
         VBox root = (VBox) rootParent;
         Scene scene = new Scene(root, 400, 400);
@@ -173,7 +173,7 @@ public class Application extends javafx.application.Application {
         // Get the controller and pass data
         Controller controller = fxmlLoader.getController();
 //        controller.setScore(score);
-        controller.setGameOverMessage("YOU LOSE");
+        controller.setGameOverMessage("Defeat");
 
 
         VBox root = (VBox) rootParent;
