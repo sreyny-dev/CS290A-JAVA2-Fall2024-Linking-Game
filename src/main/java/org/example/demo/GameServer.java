@@ -75,15 +75,8 @@ public class GameServer {
         player1.setGame(boardGame, player2);
         player2.setGame(boardGame, player1);
 
-//        player1.isTurn = true;
-//        player2.isTurn = false;
-
-
         player1.setTurn(true);
         player2.setTurn(false);
-
-//        player1.out.println("YOUR_TURN");
-//        player2.out.println("NOT_YOUR_TURN");
 
         // Send the board to both players
         player1.sendBoard(boardGame);
@@ -173,6 +166,10 @@ public class GameServer {
 
                     if (actionsInTurn >= 2) {
 
+                        if (opponent == null || opponent.socket.isClosed()) {
+                            continue; // Skip further processing
+                        }
+
                         StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < tempCoordinates.size(); i++) {
                             sb.append(tempCoordinates.get(i));
@@ -187,8 +184,12 @@ public class GameServer {
                         if(opponent!=null) {
                             opponent.out.println(drawLineMessage);  // Notify the opponent
                         }
+
                         tempCoordinates.clear();
-                        passTurnToOpponent(this);
+
+                        if(this.opponent!=null){
+                            passTurnToOpponent(this);
+                        }
                     }
 
                     if(message.startsWith("REMOVE:")){
@@ -196,20 +197,16 @@ public class GameServer {
                         String boardState = message.substring("REMOVE:".length());  // Extract board state
                         String updatedBoard = "UPDATED_BOARD:" + boardState;
                         this.out.println(updatedBoard);
-                        opponent.out.println(updatedBoard);
-                        passTurnToOpponent(this);
+                        if(opponent!=null){
+                            opponent.out.println(updatedBoard);
+                        }
+
                     }
 
                     if(message.startsWith("SCORE:")){
                         String score = message.substring("SCORE:".length());
                         this.out.println("YOUR_SCORE:" + score);
                     }
-//
-//                    if(message.startsWith("GAME_OVER")){
-//                        this.out.println("YOU_LOSE");
-//                        opponent.out.println("YOU_WIN");
-//                        break;
-//                    }
 
                     if (message.startsWith("GAME_OVER")) {
                         this.out.println("YOU_LOSE");
@@ -222,7 +219,7 @@ public class GameServer {
                         if (opponent != null) {
                             opponent.resetGame();
                         }
-                        continue; // Continue listening for new messages
+                        break; // end thread
                     }
 
 
@@ -291,9 +288,6 @@ public class GameServer {
         private static synchronized void passTurnToOpponent(ClientHandler currentPlayer) {
             currentPlayer.setTurn(false);
             currentPlayer.opponent.setTurn(true); // Pass the turn to the opponent
-
-            currentPlayer.out.println("NOT_YOUR_TURN");
-            currentPlayer.opponent.out.println("YOUR_TURN");
             actionsInTurn = 0;
         }
 

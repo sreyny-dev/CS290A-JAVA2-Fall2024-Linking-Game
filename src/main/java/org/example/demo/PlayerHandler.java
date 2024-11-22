@@ -1,6 +1,8 @@
 package org.example.demo;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.util.Duration;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -82,7 +84,22 @@ public class PlayerHandler implements Runnable {
                 }else if(message.startsWith("YOUR_SCORE:")){
                     playerScore = Integer.parseInt(message.split(" ")[1]);
                 }else if (message.equals("opponent_disconnected")) {
-                    Platform.runLater(() -> controller.updateSmsdis("Opponent has Disconnected"));
+                    Platform.runLater(() -> {
+                        // Update the UI with the disconnection message
+                        controller.updateSmsdis("Opponent has Disconnected");
+
+                        // Use a PauseTransition to add a delay before transitioning to the winner screen
+                        PauseTransition pause = new PauseTransition(Duration.seconds(2)); // Adjust delay as needed
+                        pause.setOnFinished(event -> {
+                            try {
+                                Application.onGameOverWinner(); // Transition to winner screen
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+                        pause.play();
+                    });
+
                 }
 
                 if (message.startsWith("DRAW_LINE:")) {
@@ -123,18 +140,6 @@ public class PlayerHandler implements Runnable {
             out.println(message);
         }
     }
-
-//    public void close() {
-//        if (!active) return;
-//        try {
-//            active = false;
-//            if (in != null) in.close();
-//            if (out != null) out.close();
-//            if (socket != null && !socket.isClosed()) socket.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     public void close() {
         if (!active) return; // Avoid double-closing
