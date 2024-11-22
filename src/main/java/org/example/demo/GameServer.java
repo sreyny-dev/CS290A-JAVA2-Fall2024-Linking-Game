@@ -97,7 +97,7 @@ public class GameServer {
         Random random = new Random();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                board[i][j] = random.nextInt(9);
+                board[i][j] = random.nextInt(12);
             }
         }
         return board;

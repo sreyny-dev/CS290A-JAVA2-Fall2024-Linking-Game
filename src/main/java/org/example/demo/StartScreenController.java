@@ -20,9 +20,9 @@ public class StartScreenController {
     @FXML
     public void initialize() {
         // Set images for each ImageView
-        image4x4.setImage(new Image(getClass().getResourceAsStream("/org/example/demo/button.png")));
-        image6x8.setImage(new Image(getClass().getResourceAsStream("/org/example/demo/button.png")));
-        image8x8.setImage(new Image(getClass().getResourceAsStream("/org/example/demo/button.png")));
+        image4x4.setImage(new Image(getClass().getResourceAsStream("/org/example/demo/image4x4.png")));
+        image6x8.setImage(new Image(getClass().getResourceAsStream("/org/example/demo/image6x8.png")));
+        image8x8.setImage(new Image(getClass().getResourceAsStream("/org/example/demo/image8x8.png")));
     }
 
     @FXML
