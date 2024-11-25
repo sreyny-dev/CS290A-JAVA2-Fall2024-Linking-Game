@@ -112,6 +112,10 @@ public class PlayerHandler implements Runnable {
                     Platform.runLater(() -> controller.drawLineBetweenButtons(row1, col1, row2, col2));
                 }
 
+                if(message.startsWith("SERVER_SHUTDOWN")){
+
+                    Platform.runLater(() -> controller.updateSmsdis("Server ShutDown..."));
+                }
 
                 if (message.startsWith("UPDATED_BOARD:")) {
                     String[] toRemove = message.split(":")[1].split(",");
