@@ -7,6 +7,8 @@ This report details the implementation of a **Two-Player Icon Matching Game**. T
 ## 2. System Architecture
 
 ### 2.1. Server-Side Architecture
+![Architecture Design](./vdo/img.png)
+
 
 The server is responsible for managing game states, handling client connections, and ensuring synchronization. The server performs the following tasks:
 - **Player Connection Management**: Waits for incoming player connections and automatically matches players to start a game. If no opponent is available, the server informs the player to wait.
