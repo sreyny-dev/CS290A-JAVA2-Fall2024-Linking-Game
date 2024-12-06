@@ -4,4 +4,5 @@ jjk,1
 sreyny,1
 mar,1
 c,1
-fitira,1
+fitria,1
+yida,1
