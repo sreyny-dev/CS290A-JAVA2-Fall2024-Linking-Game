@@ -67,4 +67,9 @@ By managing the queue, matching players, and synchronizing game actions, the ser
 ## Demo Video
 
 Here is a demo of the **Two-Player Icon Matching Game**:
+<<<<<<< HEAD
 ![Demo Video](vdo/demo_output.mp4)
+=======
+
+[Watch the demo video](demo_output.mp4)
+>>>>>>> 3f966f479e5d97f30c8fad8bd18336847af99943
